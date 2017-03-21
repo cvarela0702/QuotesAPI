@@ -9,4 +9,11 @@ return [
             'db' => [],
         ],
     ],
+    'zf-mvc-auth' => [
+        'authentication' => [
+            'map' => [
+                'QuotesAPI\\V1' => 'basic',
+            ],
+        ],
+    ],
 ];
