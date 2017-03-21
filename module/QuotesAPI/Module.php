@@ -3,6 +3,8 @@ namespace QuotesAPI;
 
 use ZF\Apigility\Provider\ApigilityProviderInterface;
 
+use Zend\Uri\UriFactory;
+
 class Module implements ApigilityProviderInterface
 {
     public function getConfig()
@@ -19,5 +21,10 @@ class Module implements ApigilityProviderInterface
                 ],
             ],
         ];
+    }
+
+    public function onBootstrap()
+    {
+        UriFactory::registerScheme('chrome-extension', 'Zend\Uri\Uri');
     }
 }
