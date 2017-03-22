@@ -10,7 +10,13 @@ return [
          /**
           * Set the list of allowed origins domain with protocol.
           */
-          'allowed_origins' => ['*'],
+          'allowed_origins' => [
+            //'*',
+            //'localhost:1841',
+            //'localhost',
+            //'http://localhost',
+            'http://localhost:1841'
+          ],
 
          /**
           * Set the list of HTTP verbs.
@@ -47,6 +53,6 @@ return [
           * this to work, you must set this option to true so that the server can serve
           * the proper response header.
           */
-         // 'allowed_credentials' => false,
+          'allowed_credentials' => true,
     ],
 ];
