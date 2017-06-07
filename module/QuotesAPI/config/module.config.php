@@ -20,12 +20,22 @@ return [
                     ],
                 ],
             ],
+            'quotes-api.rest.quotesrest' => [
+                'type' => 'Segment',
+                'options' => [
+                    'route' => '/quotesrest[/:quotesrest_id]',
+                    'defaults' => [
+                        'controller' => 'QuotesAPI\\V1\\Rest\\Quotesrest\\Controller',
+                    ],
+                ],
+            ],
         ],
     ],
     'zf-versioning' => [
         'uri' => [
             0 => 'quotes-api.rest.authors',
             1 => 'quotes-api.rest.quotes',
+            2 => 'quotes-api.rest.quotesrest',
         ],
     ],
     'zf-rest' => [
@@ -66,18 +76,45 @@ return [
                 0 => 'GET',
                 1 => 'POST',
             ],
-            'collection_query_whitelist' => [],
+            'collection_query_whitelist' => [
+                0 => 'author_id',
+            ],
             'page_size' => 25,
             'page_size_param' => null,
             'entity_class' => \QuotesAPI\V1\Rest\Quotes\QuotesEntity::class,
             'collection_class' => \QuotesAPI\V1\Rest\Quotes\QuotesCollection::class,
             'service_name' => 'quotes',
         ],
+        'QuotesAPI\\V1\\Rest\\Quotesrest\\Controller' => [
+            'listener' => \QuotesAPI\V1\Rest\Quotesrest\QuotesrestResource::class,
+            'route_name' => 'quotes-api.rest.quotesrest',
+            'route_identifier_name' => 'quotesrest_id',
+            'collection_name' => 'quotesrest',
+            'entity_http_methods' => [
+                0 => 'GET',
+                1 => 'PATCH',
+                2 => 'PUT',
+                3 => 'DELETE',
+            ],
+            'collection_http_methods' => [
+                0 => 'GET',
+                1 => 'POST',
+            ],
+            'collection_query_whitelist' => [
+                0 => 'author_id',
+            ],
+            'page_size' => 25,
+            'page_size_param' => null,
+            'entity_class' => \QuotesAPI\V1\Rest\Quotesrest\QuotesrestEntity::class,
+            'collection_class' => \QuotesAPI\V1\Rest\Quotesrest\QuotesrestCollection::class,
+            'service_name' => 'quotesrest',
+        ],
     ],
     'zf-content-negotiation' => [
         'controllers' => [
             'QuotesAPI\\V1\\Rest\\Authors\\Controller' => 'HalJson',
             'QuotesAPI\\V1\\Rest\\Quotes\\Controller' => 'HalJson',
+            'QuotesAPI\\V1\\Rest\\Quotesrest\\Controller' => 'HalJson',
         ],
         'accept_whitelist' => [
             'QuotesAPI\\V1\\Rest\\Authors\\Controller' => [
@@ -90,6 +127,11 @@ return [
                 1 => 'application/hal+json',
                 2 => 'application/json',
             ],
+            'QuotesAPI\\V1\\Rest\\Quotesrest\\Controller' => [
+                0 => 'application/vnd.quotes-api.v1+json',
+                1 => 'application/hal+json',
+                2 => 'application/json',
+            ],
         ],
         'content_type_whitelist' => [
             'QuotesAPI\\V1\\Rest\\Authors\\Controller' => [
@@ -97,6 +139,10 @@ return [
                 1 => 'application/json',
             ],
             'QuotesAPI\\V1\\Rest\\Quotes\\Controller' => [
+                0 => 'application/vnd.quotes-api.v1+json',
+                1 => 'application/json',
+            ],
+            'QuotesAPI\\V1\\Rest\\Quotesrest\\Controller' => [
                 0 => 'application/vnd.quotes-api.v1+json',
                 1 => 'application/json',
             ],
@@ -128,6 +174,18 @@ return [
                 'route_identifier_name' => 'quotes_id',
                 'is_collection' => true,
             ],
+            \QuotesAPI\V1\Rest\Quotesrest\QuotesrestEntity::class => [
+                'entity_identifier_name' => 'entity_id',
+                'route_name' => 'quotes-api.rest.quotesrest',
+                'route_identifier_name' => 'quotesrest_id',
+                'hydrator' => \Zend\Hydrator\ArraySerializable::class,
+            ],
+            \QuotesAPI\V1\Rest\Quotesrest\QuotesrestCollection::class => [
+                'entity_identifier_name' => 'entity_id',
+                'route_name' => 'quotes-api.rest.quotesrest',
+                'route_identifier_name' => 'quotesrest_id',
+                'is_collection' => true,
+            ],
         ],
     ],
     'zf-apigility' => [
@@ -156,6 +214,9 @@ return [
         ],
         'QuotesAPI\\V1\\Rest\\Quotes\\Controller' => [
             'input_filter' => 'QuotesAPI\\V1\\Rest\\Quotes\\Validator',
+        ],
+        'QuotesAPI\\V1\\Rest\\Quotesrest\\Controller' => [
+            'input_filter' => 'QuotesAPI\\V1\\Rest\\Quotesrest\\Validator',
         ],
     ],
     'input_filter_specs' => [
@@ -287,6 +348,54 @@ return [
                 'validators' => [],
             ],
         ],
+        'QuotesAPI\\V1\\Rest\\Quotesrest\\Validator' => [
+            0 => [
+                'required' => false,
+                'validators' => [],
+                'filters' => [],
+                'name' => 'entity_id',
+                'description' => 'The key id',
+                'field_type' => 'int',
+                'error_message' => 'Please enter a valid entity_id',
+                'allow_empty' => true,
+                'continue_if_empty' => true,
+            ],
+            1 => [
+                'required' => true,
+                'validators' => [],
+                'filters' => [],
+                'name' => 'author_id',
+                'description' => 'The author ID',
+                'field_type' => 'int',
+                'error_message' => 'Please provide a valid author_id',
+            ],
+            2 => [
+                'required' => true,
+                'validators' => [],
+                'filters' => [],
+                'name' => 'quote',
+                'description' => 'The quote',
+                'error_message' => 'Please provide a valid quote',
+            ],
+            3 => [
+                'required' => false,
+                'validators' => [],
+                'filters' => [],
+                'name' => 'location',
+                'description' => 'The quote location',
+                'allow_empty' => true,
+                'continue_if_empty' => true,
+                'error_message' => 'Please provide a valid quote location',
+            ],
+            4 => [
+                'required' => true,
+                'validators' => [],
+                'filters' => [],
+                'name' => 'created_at',
+                'description' => 'The quote creation date and time',
+                'error_message' => 'Please provide a valid creation date and time',
+            ],
+        ],
     ],
     'zf-mvc-auth' => [
         'authorization' => [
@@ -322,6 +431,13 @@ return [
                     'DELETE' => true,
                 ],
             ],
+        ],
+    ],
+    'service_manager' => [
+        'factories' => [
+            \QuotesAPI\V1\Rest\Quotesrest\QuotesrestResource::class => \QuotesAPI\V1\Rest\Quotesrest\QuotesrestResourceFactory::class,
+            'QuotesAPI\\V1\\Rest\\Quotesrest\\TableGatewayMapper' => \QuotesAPI\V1\Rest\Quotesrest\QuotesrestTableGatewayMapperFactory::class,
+            'QuotesAPI\\V1\\Rest\\Quotesrest\\TableGateway' => \QuotesAPI\V1\Rest\Quotesrest\QuotesrestTableGatewayFactory::class,
         ],
     ],
 ];
