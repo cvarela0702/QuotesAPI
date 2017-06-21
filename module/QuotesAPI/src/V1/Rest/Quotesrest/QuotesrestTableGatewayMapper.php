@@ -12,7 +12,7 @@ use DomainException;
 use InvalidArgumentException;
 use Traversable;
 use Zend\Paginator\Adapter\DbTableGateway;
-
+use ZF\ApiProblem\ApiProblem;
 
 /**
  * Description of QuotesrestTableGatewayMapper
@@ -20,14 +20,42 @@ use Zend\Paginator\Adapter\DbTableGateway;
  * @author gabriel
  */
 class QuotesrestTableGatewayMapper {
-    protected $table;
+    protected $tableGateway;
     
-    public function __construct($table) {
-        $this->table=$table;
+    public function __construct($tableGateway) {
+        $this->tableGateway=$tableGateway;
     }
     
     public function fetchAll($params=array())
     {
-        return new QuotesrestCollection(new DbTableGateway($this->table,$params));
+        return new QuotesrestCollection(new DbTableGateway($this->tableGateway,$params));
+    }
+    
+    public function create($data=array())
+    {
+        if ($data instanceof Traversable) {
+            $data = ArrayUtils::iteratorToArray($data);
+        }
+        if (is_object($data)) {
+            $data = (array) $data;
+        }
+
+        if (!is_array($data)) {
+            throw new InvalidArgumentException(sprintf(
+                'Invalid data provided to %s; must be an array or Traversable',
+                __METHOD__
+            ));
+        }
+        
+        $this->tableGateway->insert($data);
+        $data['entity_id']=$this->tableGateway->lastInsertValue;
+        //$data['id']=$this->tableGateway->lastInsertValue;
+        
+        //$data['entity_id']=13;
+        
+        return array(
+            'response'=>$data,
+            'success'=>true,
+        );
     }
 }
