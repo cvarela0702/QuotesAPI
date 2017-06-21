@@ -141,10 +141,12 @@ return [
             'QuotesAPI\\V1\\Rest\\Quotes\\Controller' => [
                 0 => 'application/vnd.quotes-api.v1+json',
                 1 => 'application/json',
+                2 => 'application/x-www-form-urlencoded',
             ],
             'QuotesAPI\\V1\\Rest\\Quotesrest\\Controller' => [
                 0 => 'application/vnd.quotes-api.v1+json',
                 1 => 'application/json',
+                2 => 'application/x-www-form-urlencoded',
             ],
         ],
     ],
@@ -388,7 +390,7 @@ return [
                 'error_message' => 'Please provide a valid quote location',
             ],
             4 => [
-                'required' => true,
+                'required' => false,
                 'validators' => [],
                 'filters' => [],
                 'name' => 'created_at',

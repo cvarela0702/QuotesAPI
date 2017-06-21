@@ -24,7 +24,7 @@ class QuotesrestResource extends AbstractResourceListener
      */
     public function create($data)
     {
-        return new ApiProblem(405, 'The POST method has not been defined');
+        return $this->mapper->create($data);
     }
 
     /**
@@ -68,7 +68,7 @@ class QuotesrestResource extends AbstractResourceListener
      */
     public function fetchAll($params = [])
     {
-        error_log("params: ". print_r(debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS,1),10));
+        //error_log("params: ". print_r(debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS,1),10));
         return $this->mapper->fetchAll(get_object_vars($params));
         //return new ApiProblem(405, 'The GET method has not been defined for collections');
     }
