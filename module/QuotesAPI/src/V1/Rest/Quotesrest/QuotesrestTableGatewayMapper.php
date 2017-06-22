@@ -58,4 +58,22 @@ class QuotesrestTableGatewayMapper {
             'success'=>true,
         );
     }
+    
+    public function update($id,$data)
+    {
+        if (is_object($data)) {
+            $data = (array) $data;
+        }
+        $this->tableGateway->update($data, ['entity_id' => $id]);
+        
+        $resultSet = $this->tableGateway->select(['entity_id' => $id]);
+        if (0 === count($resultSet)) {
+            throw new DomainException('Update operation failed or result in row deletion', 500);
+        }
+        return array(
+            'response'=>$resultSet->current(),
+            'success'=>true,
+        );
+        
+    }
 }
