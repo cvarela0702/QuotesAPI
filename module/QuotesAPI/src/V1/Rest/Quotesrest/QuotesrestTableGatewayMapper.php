@@ -76,4 +76,15 @@ class QuotesrestTableGatewayMapper {
         );
         
     }
+    
+    public function delete($id)
+    {
+        $result = $this->tableGateway->delete(['entity_id' => $id]);
+
+        if (! $result) {
+            return false;
+        }
+
+        return true;
+    }
 }
