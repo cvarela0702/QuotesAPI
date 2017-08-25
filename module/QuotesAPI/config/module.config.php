@@ -55,7 +55,7 @@ return [
                 1 => 'POST',
             ],
             'collection_query_whitelist' => [],
-            'page_size' => 25,
+            'page_size' => '250',
             'page_size_param' => null,
             'entity_class' => \QuotesAPI\V1\Rest\Authors\AuthorsEntity::class,
             'collection_class' => \QuotesAPI\V1\Rest\Authors\AuthorsCollection::class,
